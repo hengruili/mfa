@@ -9,6 +9,7 @@ const mount = (el) => {
     );
 };
 
+// in dev, we just query the mount selector
 if (process.env.NODE_ENV === 'development') {
     const devRoot = document.querySelector('#_marketing-dev-root');
     if (devRoot) {
