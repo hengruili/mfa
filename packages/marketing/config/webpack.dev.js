@@ -21,7 +21,7 @@ const devConfig = {
                 './MarketingApp': './src/bootstrap',
             },
             shared: packageJson.dependencies 
-        })
+        }),
     ]
 };
 
