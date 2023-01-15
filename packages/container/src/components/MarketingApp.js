@@ -1,23 +1,28 @@
-import React, {useRef, useEffect} from 'react';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import MaterialLink from '@material-ui/core/Link';
-import { Link } from 'react-router-dom';
-import {mount} from 'marketing/MarketingApp';
+import React, { useRef, useEffect } from 'react';
+import { mount } from 'marketing/MarketingApp';
+import { useHistory } from 'react-router-dom';
 
 
 export default () => {
   const ref = useRef(null);
-  useEffect(()=>{
-    mount(ref.current);
-  });
+  const history = useHistory();
+  useEffect(() => {
+    const { onParentNavigate } = mount(ref.current, {
+      onNavigate: ({ pathname: nextPathname }) => {
+        const { currentPath } = history.location;
+        if (currentPath !== nextPathname) {
+          history.push(nextPathname)
+        }
+      }
+    });
+
+    history.listen((location) => {
+      if (onParentNavigate) {
+        onParentNavigate(location);
+      }
+    });
+   //history.listen(onParentNavigate);
+  }, []);
 
   return <div ref={ref}></div>
 }
