@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import MarketingApp from './components/MarketingApp';
-import AuthApp from './components/AuthApp';
 import Header from './components/Header';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core';
+
+
+const lazyMarketingApp = lazy(() => import('./components/MarketingApp'));
+const lazyAuthApp = lazy(() => import('./components/AuthApp'));
 
 const generateClassName = createGenerateClassName({
     productionPrefix: 'con'
@@ -15,11 +17,12 @@ export default () => {
             <BrowserRouter>
                 <div>
                     <Header />
-                    <Switch>
-                        <Route path="/auth" component={AuthApp} />
-                        <Route path="/" component={MarketingApp} />
-                    </Switch>
-                    <MarketingApp />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Switch>
+                            <Route path="/auth" component={lazyAuthApp} />
+                            <Route path="/" component={lazyMarketingApp} />
+                        </Switch>
+                    </Suspense>
                 </div>
             </BrowserRouter>
         </StylesProvider>
